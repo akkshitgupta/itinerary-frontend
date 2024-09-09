@@ -1,16 +1,10 @@
-import { userLogin } from "../services/authentication";
-import { useAuth } from "../contexts/AuthContext";
-
-export default function LoginPage() {
-    const { setIsLoggedin } = useAuth();
-
-    const submitData = (e) => {
-        userLogin(e) ? setIsLoggedin(true) : setIsLoggedin(false);
-    }
+export default function SignupPage() {
     return (
         <section className="bg-gray-50 dark:bg-gray-900">
             <div className="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0">
-                
+                <span className="dark:text-white">
+                    {companyName}
+                </span>
                 <div className="w-full bg-white rounded-lg shadow dark:border md:mt-0 sm:max-w-md xl:p-0 dark:bg-gray-800 dark:border-gray-700">
                     <div className="p-6 space-y-4 md:space-y-6 sm:p-8">
                         <h1 className="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white">

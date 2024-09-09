@@ -10,9 +10,9 @@ export function AuthProvider(props) {
     const [authUser, setAuthUser] = useState(null);
     const [isLoggedin, setIsLoggedin] = useState(false);
 
-    const value = [
+    const value = {
         authUser, setAuthUser, isLoggedin, setIsLoggedin
-    ]
+    }
     return (
         <AuthContext.Provider value={value}>
             {props.children}
