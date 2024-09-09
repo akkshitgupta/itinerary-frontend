@@ -1,20 +1,22 @@
 import { useNavigate } from "react-router-dom";
-import LandingPage from "./components/LandingPage"
+import LandingPage from "./components/LandingPage";
 import { useAuth } from "./contexts/AuthContext";
-
+import { useEffect } from "react";
 
 function App() {
-  const {isLoggedin} = useAuth();
+  const { isLoggedin } = useAuth();
   const navigate = useNavigate();
-  
-  if(!isLoggedin){
-    navigate("/login");
-  }
+
+  useEffect(() => {
+    if (isLoggedin) {
+      navigate("/dashboard");
+    }
+  }, [isLoggedin]);
   return (
     <>
-    <LandingPage />
+      <LandingPage />
     </>
-  )
+  );
 }
 
-export default App
+export default App;
