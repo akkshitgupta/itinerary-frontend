@@ -1,19 +1,18 @@
+import { useNavigate } from "react-router-dom";
 import LandingPage from "./components/LandingPage"
-import { conf } from "./conf";
-import LoginPage from "./components/LoginPage";
 import { useAuth } from "./contexts/AuthContext";
+
 
 function App() {
   const {isLoggedin} = useAuth();
-  if(!isLoggedin) return <LoginPage />;
+  const navigate = useNavigate();
+  
+  if(!isLoggedin){
+    navigate("/login");
+  }
   return (
     <>
-      <nav className="bg-gray-800">
-        <span className="pb-4 text-xl font-semibold underline">
-              {conf.companyName}
-        </span>
-      </nav>
-      <LandingPage />
+    <LandingPage />
     </>
   )
 }
