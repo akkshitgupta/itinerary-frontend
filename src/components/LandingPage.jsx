@@ -1,7 +1,26 @@
 import Card from "./Card";
 import SearchBar from "./SearchBar";
+import { useEffect } from "react";
+import Cookies from "js-cookie";
+import { useNavigate } from "react-router-dom";
+import user from "../services/authentication";
+import { useAuth } from "../contexts/AuthContext";
 
 export default function LandingPage() {
+  const navigate = useNavigate();
+  const { setAuthUser } = useAuth();
+
+  useEffect(() => {
+    const token = Cookies.get("access_token");
+    if (!token) {
+      navigate("/login");
+    }
+
+    user.getDetails(token).then((res) => {
+      setAuthUser(res.first_name);
+    });
+  }, []);
+
   return (
     <div className="w-full">
       <section className="flex flex-col justify-center items-center w-full">

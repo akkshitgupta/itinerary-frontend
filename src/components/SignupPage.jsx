@@ -1,6 +1,5 @@
 import user from "../services/authentication";
-import { useAuth } from "../contexts/AuthContext";
-import { Link, redirect } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
 
 const style =
@@ -8,16 +7,19 @@ const style =
 
 export default function SignupPage() {
   const [show, setShow] = useState({ message: "", status: false });
-  const { setAuthUser } = useAuth();
-
+  const navigate = useNavigate();
   const submitData = (e) => {
-    user.registerUser(e).then((res) => {
-      if (res) {
-        setShow(res.message);
-        setAuthUser(res);
-        redirect("/login");
-      }
-    });
+    user
+      .registerUser(e)
+      .then((res) => {
+        setShow({ message: "check your email", status: true });
+        setTimeout(() => {
+          navigate("/login");
+        }, 3000);
+      })
+      .catch((err) => {
+        setShow({ message: err.message, status: true });
+      });
   };
 
   return (

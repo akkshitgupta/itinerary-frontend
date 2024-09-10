@@ -1,16 +1,25 @@
 import user from "../services/authentication";
 import { useAuth } from "../contexts/AuthContext";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 export default function LoginPage() {
-  const { setIsLoggedin } = useAuth();
+  const { setAuthUser, setIsLoggedin } = useAuth();
+  const navigate = useNavigate();
 
   const submitData = (e) => {
-    user.LoginUser(e).then((res) => {
-      if (res) {
+    user
+      .LoginUser(e)
+      .then(() => {
+        user.getDetails().then((res) => {
+          setAuthUser(res.first_name);
+        });
+      })
+      .then((res) => {
         setIsLoggedin(true);
-      }
-    });
+      })
+      .then(() => {
+        navigate("/");
+      });
   };
   return (
     <section className="bg-gray-50">
@@ -25,17 +34,17 @@ export default function LoginPage() {
               onSubmit={(e) => submitData(e)}>
               <div>
                 <label
-                  htmlFor="email"
+                  htmlFor="username"
                   className="block mb-2 text-sm font-medium text-gray-900">
                   Your email
                 </label>
                 <input
                   type="email"
-                  name="email"
-                  id="email"
+                  name="username"
+                  id="username"
                   className="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5"
                   placeholder="name@company.com"
-                  required=""
+                  required
                 />
               </div>
               <div>
@@ -50,7 +59,7 @@ export default function LoginPage() {
                   id="password"
                   placeholder="••••••••"
                   className="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5"
-                  required=""
+                  required
                 />
               </div>
               <a

@@ -1,4 +1,5 @@
 import { conf } from "../conf";
+import Cookies from "js-cookie";
 
 export const formData = (event) => {
   event.preventDefault();
@@ -7,32 +8,55 @@ export const formData = (event) => {
 };
 
 class User {
-  first_name;
-  last_name;
-  email;
-  password;
-
   async LoginUser(event) {
     const data = formData(event);
-    const userData = await fetch(conf.apiUrl + "/user/profile/", {
-      method: "post",
-      body: data,
+    console.log(data);
+
+    const resp = await fetch(conf.apiUrl + "/token/", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data),
     });
-    if (!userData) return false;
-    return false;
+    console.log({ resp });
+
+    if (!resp.ok) throw new Error({ message: "check your credentials" });
+
+    Cookies.set("access_token", resp.access, { expires: 7, secure: true });
+
+    return resp;
   }
 
   async registerUser(event) {
     const data = formData(event);
-    console.log(data);
 
-    const userData = await fetch(conf.apiUrl + "/user/register/", {
-      method: "post",
-      body: data,
+    const res = await fetch(conf.apiUrl + "/user/register/", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data),
     });
-    if (!userData) throw new Error("Could not register the user at the moment");
 
-    return userData;
+    if (!res.ok)
+      throw new Error({ message: "could not register at the moment" });
+
+    return res;
+  }
+
+  async getDetails() {
+    const resp = await fetch(conf.apiUrl + "/user/profile/", {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+
+    if (!resp.ok)
+      throw new Error({ message: "cannot fetch details as of now" });
+
+    return resp;
   }
 }
 
