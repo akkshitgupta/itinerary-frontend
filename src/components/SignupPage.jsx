@@ -1,13 +1,25 @@
 import user from "../services/authentication";
 import { useAuth } from "../contexts/AuthContext";
-import { Link } from "react-router-dom";
+import { Link, redirect } from "react-router-dom";
+import { useState } from "react";
 
-export default function LoginPage() {
-  const { setIsLoggedin } = useAuth();
+const style =
+  "bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5";
+
+export default function SignupPage() {
+  const [show, setShow] = useState({ message: "", status: false });
+  const { setAuthUser } = useAuth();
 
   const submitData = (e) => {
-    user.LoginUser(e) ? setIsLoggedin(true) : setIsLoggedin(false);
+    user.registerUser(e).then((res) => {
+      if (res) {
+        setShow(res.message);
+        setAuthUser(res);
+        redirect("/login");
+      }
+    });
   };
+
   return (
     <section className="bg-gray-50">
       <div className="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0">
@@ -21,6 +33,36 @@ export default function LoginPage() {
               onSubmit={(e) => submitData(e)}>
               <div>
                 <label
+                  htmlFor="firstname"
+                  className="block mb-2 text-sm font-medium text-gray-900">
+                  First Name
+                </label>
+                <input
+                  type="text"
+                  name="first_name"
+                  id="firstname"
+                  className={style}
+                  placeholder="Joe"
+                  required
+                />
+              </div>
+              <div>
+                <label
+                  htmlFor="lastname"
+                  className="block mb-2 text-sm font-medium text-gray-900">
+                  Last Name
+                </label>
+                <input
+                  type="text"
+                  name="last_name"
+                  id="lastname"
+                  className={style}
+                  placeholder="Doe"
+                  required
+                />
+              </div>
+              <div>
+                <label
                   htmlFor="email"
                   className="block mb-2 text-sm font-medium text-gray-900">
                   Your email
@@ -29,9 +71,9 @@ export default function LoginPage() {
                   type="email"
                   name="email"
                   id="email"
-                  className="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5"
+                  className={style}
                   placeholder="name@company.com"
-                  required=""
+                  required
                 />
               </div>
               <div>
@@ -44,20 +86,19 @@ export default function LoginPage() {
                   type="password"
                   name="password"
                   id="password"
-                  placeholder="••••••••"
-                  className="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5"
-                  required=""
+                  className={style}
+                  required
                 />
               </div>
-              <a
+              {/* <a
                 href="#"
                 className="text-sm font-medium pt-2 inline-block text-gray-600 hover:underline">
                 Forgot password?
-              </a>
+              </a> */}
               <button
                 type="submit"
                 className="block w-full hover:bg-violet-500 hover:text-white rounded-full py-2 bg-violet-100 ">
-                Sign in
+                Create Account
               </button>
               <p className="text-sm font-light text-gray-500">
                 Already have an account yet?{" "}
@@ -71,6 +112,12 @@ export default function LoginPage() {
           </div>
         </div>
       </div>
+      <aside
+        className={`absolute top-28 right-2 px-4 py-2 bg-violet-700 rounded-md text-white animate-bounce ${
+          show.status ? "" : "hidden"
+        }`}>
+        {show.message}
+      </aside>
     </section>
   );
 }

@@ -1,19 +1,20 @@
 import { conf } from "../conf";
 
-const formData = (event) => {
+export const formData = (event) => {
   event.preventDefault();
   const formData = new FormData(event.currentTarget);
   return Object.fromEntries(formData);
 };
 
 class User {
-  name;
+  first_name;
+  last_name;
   email;
   password;
 
   async LoginUser(event) {
     const data = formData(event);
-    const userData = await fetch(conf.apiUrl + "user/login}", {
+    const userData = await fetch(conf.apiUrl + "/user/profile/", {
       method: "post",
       body: data,
     });
@@ -23,12 +24,15 @@ class User {
 
   async registerUser(event) {
     const data = formData(event);
-    const userData = await fetch(conf.apiUrl + "user/register}", {
+    console.log(data);
+
+    const userData = await fetch(conf.apiUrl + "/user/register/", {
       method: "post",
       body: data,
     });
     if (!userData) throw new Error("Could not register the user at the moment");
-    return true;
+
+    return userData;
   }
 }
 

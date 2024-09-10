@@ -6,7 +6,11 @@ export default function LoginPage() {
   const { setIsLoggedin } = useAuth();
 
   const submitData = (e) => {
-    user.LoginUser(e) ? setIsLoggedin(true) : setIsLoggedin(false);
+    user.LoginUser(e).then((res) => {
+      if (res) {
+        setIsLoggedin(true);
+      }
+    });
   };
   return (
     <section className="bg-gray-50">
