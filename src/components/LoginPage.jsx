@@ -62,11 +62,6 @@ export default function LoginPage() {
                   required
                 />
               </div>
-              <a
-                href="#"
-                className="text-sm font-medium pt-2 inline-block text-gray-600 hover:underline">
-                Forgot password?
-              </a>
               <button
                 type="submit"
                 className="block w-full hover:bg-violet-500 hover:text-white rounded-full py-2 bg-violet-100 ">

@@ -1,6 +1,8 @@
-import { Navigate, Outlet } from "react-router-dom";
+import { Navigate } from "react-router-dom";
 import LandingPage from "./LandingPage";
+import Cookies from "js-cookie";
+
 export default function PrivateRoutes() {
-  let auth = { token: true };
-  return auth.token ? <LandingPage /> : <Navigate to="/login" />;
+  const token = Cookies.get("access_token");
+  return token ? <LandingPage /> : <Navigate to="/login" />;
 }

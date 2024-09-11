@@ -9,7 +9,7 @@ function App() {
 
   useEffect(() => {
     if (isLoggedin) {
-      navigate("/dashboard");
+      navigate("/");
     }
   }, [isLoggedin]);
   return (

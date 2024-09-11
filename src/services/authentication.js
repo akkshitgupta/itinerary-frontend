@@ -10,7 +10,6 @@ export const formData = (event) => {
 class User {
   async LoginUser(event) {
     const data = formData(event);
-    console.log(data);
 
     const resp = await fetch(conf.apiUrl + "/token/", {
       method: "POST",
@@ -19,13 +18,18 @@ class User {
       },
       body: JSON.stringify(data),
     });
-    console.log({ resp });
 
     if (!resp.ok) throw new Error({ message: "check your credentials" });
 
-    Cookies.set("access_token", resp.access, { expires: 7, secure: true });
+    const respData = await resp.json();
 
-    return resp;
+    Cookies.set("access_token", respData.access, {
+      expires: 7,
+      secure: true,
+      sameSite: "Strict",
+    });
+
+    return respData;
   }
 
   async registerUser(event) {
@@ -46,17 +50,31 @@ class User {
   }
 
   async getDetails() {
-    const resp = await fetch(conf.apiUrl + "/user/profile/", {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
+    const token = Cookies.get("access_token");
+    try {
+      const resp = await fetch(conf.apiUrl + "/user/profile/", {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      });
 
-    if (!resp.ok)
-      throw new Error({ message: "cannot fetch details as of now" });
+      // Parse the response data
+      const respData = await resp.json();
 
-    return resp;
+      // Check if the response was not OK (status code 200-299)
+      if (!resp.ok) {
+        throw new Error("Cannot fetch details at the moment");
+      }
+
+      // Log and return the fetched data
+      console.log(respData);
+      return respData;
+    } catch (error) {
+      console.error("Error during fetching details:", error.message);
+      throw error; // Re-throw the error for further handling
+    }
   }
 }
 
