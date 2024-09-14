@@ -1,11 +1,30 @@
+import Cookies from "js-cookie";
 import { conf } from "../conf";
 import { formData } from "./authentication";
-import Cookies from "js-cookie";
 
-export default async function handleSearch(event) {
+const totalDays = (start, end) => {
+  const startDate = new Date(start);
+  const endDate = new Date(end);
+
+  const daysDiff = (endDate - startDate) / (1000 * 60 * 60 * 24);
+  const roundedDaysDiff = Math.round(daysDiff);
+
+  return roundedDaysDiff;
+};
+
+export default async function handleSearch(event, selectedTag) {
   const token = Cookies.get("access_token");
   const data = formData(event);
-  console.log(data);
+
+  if (selectedTag.length === 0) selectedTag = ["Tourist Places"];
+
+  const requestData = {
+    start_date: data.start_date,
+    end_date: data.end_date,
+    num_of_days: totalDays(data.start_date, data.end_date),
+    destination: data.destination,
+    must_includes: selectedTag,
+  };
 
   const res = await fetch(conf.apiUrl + "/itinerary/generate/", {
     method: "POST",
@@ -13,15 +32,11 @@ export default async function handleSearch(event) {
       "Content-Type": "application/json",
       Authorization: `Bearer ${token}`,
     },
-    body: data,
+    body: JSON.stringify(requestData),
   });
 
-  const respData = await res.json();
-
-  console.log(respData);
-
-  if (!respData.ok)
+  if (!res.ok)
     throw new Error({ message: "Cannot proceed with the query. try again" });
 
-  return respData;
+  return res;
 }

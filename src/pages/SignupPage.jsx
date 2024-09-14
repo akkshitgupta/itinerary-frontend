@@ -95,7 +95,7 @@ export default function SignupPage() {
 
               <button
                 type="submit"
-                className="block w-full hover:bg-violet-500 hover:text-white rounded-full py-2 bg-violet-100 ">
+                className="block w-full hover:bg-green-500 hover:text-white rounded-full py-2 bg-green-100 ">
                 Create Account
               </button>
               <p className="text-sm font-light text-gray-500">
@@ -111,7 +111,7 @@ export default function SignupPage() {
         </div>
       </div>
       <aside
-        className={`absolute top-28 right-2 px-4 py-2 bg-violet-700 rounded-md text-white animate-bounce ${
+        className={`absolute top-28 right-2 px-4 py-2 bg-green-700 rounded-md text-white animate-bounce ${
           show.status ? "" : "hidden"
         }`}>
         {show.message}

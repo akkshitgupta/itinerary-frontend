@@ -1,6 +1,9 @@
-import user from "../services/authentication";
-import { useAuth } from "../contexts/AuthContext";
 import { Link, useNavigate } from "react-router-dom";
+import { useAuth } from "../contexts/AuthContext";
+import user from "../services/authentication";
+
+const style =
+  "bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5";
 
 export default function LoginPage() {
   const { setAuthUser, setIsLoggedin } = useAuth();
@@ -42,7 +45,7 @@ export default function LoginPage() {
                   type="email"
                   name="username"
                   id="username"
-                  className="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5"
+                  className={style}
                   placeholder="name@company.com"
                   required
                 />
@@ -58,13 +61,13 @@ export default function LoginPage() {
                   name="password"
                   id="password"
                   placeholder="••••••••"
-                  className="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5"
+                  className={style}
                   required
                 />
               </div>
               <button
                 type="submit"
-                className="block w-full hover:bg-violet-500 hover:text-white rounded-full py-2 bg-violet-100 ">
+                className="block w-full hover:bg-green-500 hover:text-white rounded-full py-2 bg-green-100 ">
                 Sign in
               </button>
               <p className="text-sm font-light text-gray-500">

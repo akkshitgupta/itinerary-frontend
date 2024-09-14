@@ -1,6 +1,8 @@
-import React, { useState, useEffect } from "react";
-import handleSearch from "../services/search";
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { conf } from "../conf";
+import { useItinerary } from "../contexts/ItineraryContext";
+import handleSearch from "../services/search";
 
 const tags = [
   "Attractions",
@@ -8,8 +10,8 @@ const tags = [
   "Hidden Gems",
   "Herritage",
   "Shopping",
-  "Cultural ",
-  "Landmarks ",
+  "Cultural",
+  "Landmarks",
   "OutdoorsWine",
   "Adventure",
   "Arts",
@@ -19,13 +21,16 @@ const tags = [
 ];
 
 export default function SearchBar() {
-  const [location, setLocation] = useState("");
+  const { setItinerary } = useItinerary();
+  const navigate = useNavigate();
+  const [destination, setdestination] = useState("");
   const [suggestions, setSuggestions] = useState([]);
   const [debounceTimer, setDebounceTimer] = useState(null);
   const [selectedTag, setSelectedTag] = useState([]);
+  const [loader, setLoader] = useState(false);
 
   useEffect(() => {
-    if (location.length > 2) {
+    if (destination.length > 2) {
       if (debounceTimer) {
         clearTimeout(debounceTimer);
       }
@@ -33,7 +38,7 @@ export default function SearchBar() {
       const timer = setTimeout(async () => {
         try {
           const response = await fetch(
-            `https://api.geoapify.com/v1/geocode/autocomplete?text=${location}&apiKey=${conf.geoapifyApiKey}`
+            `https://api.geoapify.com/v1/geocode/autocomplete?text=${destination}&apiKey=${conf.geoapifyApiKey}`
           );
           const data = await response.json();
 
@@ -56,20 +61,38 @@ export default function SearchBar() {
     } else {
       setSuggestions([]);
     }
-  }, [location]);
+  }, [destination]);
 
-  return (
+  const submitHandler = (e) => {
+    setLoader(true);
+    handleSearch(e, selectedTag)
+      .then((resp) => resp.json())
+      .then((data) => {
+        console.log(data);
+        setItinerary(data.data);
+        setLoader(false);
+        navigate("/timeline");
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
+  return loader ? (
+    <div> Loading.....</div>
+  ) : (
     <form
-      onSubmit={(e) => handleSearch(e)}
+      onSubmit={(e) => submitHandler(e)}
       className="grid grid-cols-5 gap-6 mx-auto mt-8 w-4/5">
       <input
         type="text"
-        name="location"
-        value={location}
-        onChange={(e) => setLocation(e.target.value)}
+        name="destination"
+        value={destination}
+        onChange={(e) => setdestination(e.target.value)}
         list="suggestions"
-        placeholder="Search locations..."
-        className="px-4 py-2 border border-gray-300 rounded-full shadow-sm focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent col-span-5"
+        required
+        placeholder="Search destinations..."
+        className="px-4 py-2 border border-gray-300 rounded-full shadow-sm focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent col-span-5"
       />
       <datalist id="suggestions">
         {suggestions.map((suggestion, index) => (
@@ -79,61 +102,62 @@ export default function SearchBar() {
 
       <div
         id="date-range-picker"
-        className="flex items-center justify-center col-span-5">
+        className="flex flex-col md:flex-row items-center justify-center gap-3 col-span-5">
         <div className="relative w-full">
-          <div className="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
-            <svg
-              className="w-4 h-4 text-violet-400"
-              xmlns="http://www.w3.org/2000/svg"
-              fill="currentColor"
-              viewBox="0 0 20 20">
-              <path d="M20 4a2 2 0 0 0-2-2h-2V1a1 1 0 0 0-2 0v1h-3V1a1 1 0 0 0-2 0v1H6V1a1 1 0 0 0-2 0v1H2a2 2 0 0 0-2 2v2h20V4ZM0 18a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8H0v10Zm5-8h10a1 1 0 0 1 0 2H5a1 1 0 0 1 0-2Z" />
-            </svg>
-          </div>
           <label htmlFor="startDate" className="my-2 text-center">
             Start Date
+            <div className="absolute inset-y-11 start-0 flex items-center justify-center ps-3 pointer-events-none">
+              <svg
+                className="w-5 h-5 text-green-400"
+                xmlns="http://www.w3.org/2000/svg"
+                fill="currentColor"
+                viewBox="0 0 20 20">
+                <path d="M20 4a2 2 0 0 0-2-2h-2V1a1 1 0 0 0-2 0v1h-3V1a1 1 0 0 0-2 0v1H6V1a1 1 0 0 0-2 0v1H2a2 2 0 0 0-2 2v2h20V4ZM0 18a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8H0v10Zm5-8h10a1 1 0 0 1 0 2H5a1 1 0 0 1 0-2Z" />
+              </svg>
+            </div>
+            <input
+              required
+              id="datepicker-range-start"
+              name="start_date"
+              type="date"
+              className="border border-green-300 text-gray-900 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block w-full ps-10 p-2.5"
+            />
           </label>
-          <input
-            id="datepicker-range-start"
-            name="startDate"
-            type="date"
-            className="border border-violet-300 text-gray-900 text-sm rounded-lg focus:ring-violet-500 focus:border-violet-500 block w-full ps-10 p-2.5"
-          />
         </div>
-        <span className="mx-4 text-gray-500 col-span-1">to</span>
         <div className="relative w-full">
-          <div className="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
-            <svg
-              className="w-4 h-4 text-violet-400"
-              xmlns="http://www.w3.org/2000/svg"
-              fill="currentColor"
-              viewBox="0 0 20 20">
-              <path d="M20 4a2 2 0 0 0-2-2h-2V1a1 1 0 0 0-2 0v1h-3V1a1 1 0 0 0-2 0v1H6V1a1 1 0 0 0-2 0v1H2a2 2 0 0 0-2 2v2h20V4ZM0 18a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8H0v10Zm5-8h10a1 1 0 0 1 0 2H5a1 1 0 0 1 0-2Z" />
-            </svg>
-          </div>
           <label htmlFor="endDate" className="my-2 text-center">
             End Date
+            <div className="absolute inset-y-11 start-0 flex items-center ps-3 pointer-events-none">
+              <svg
+                className="w-5 h-5 text-green-400"
+                xmlns="http://www.w3.org/2000/svg"
+                fill="currentColor"
+                viewBox="0 0 20 20">
+                <path d="M20 4a2 2 0 0 0-2-2h-2V1a1 1 0 0 0-2 0v1h-3V1a1 1 0 0 0-2 0v1H6V1a1 1 0 0 0-2 0v1H2a2 2 0 0 0-2 2v2h20V4ZM0 18a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8H0v10Zm5-8h10a1 1 0 0 1 0 2H5a1 1 0 0 1 0-2Z" />
+              </svg>
+            </div>
+            <input
+              required
+              id="datepicker-range-end"
+              name="end_date"
+              type="date"
+              className="border border-green-300 text-gray-900 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block w-full ps-10 p-2.5"
+            />
           </label>
-          <input
-            id="datepicker-range-end"
-            name="endDate"
-            type="date"
-            className="border border-violet-300 text-gray-900 text-sm rounded-lg focus:ring-violet-500 focus:border-violet-500 block w-full ps-10 p-2.5"
-          />
         </div>
       </div>
 
       <div className="col-span-5 flex flex-wrap gap-3 text-center my-3">
         {tags.map((tag, index) => {
           return (
-            <span key={index}>
-              <label
-                htmlFor={tag}
-                className={
-                  selectedTag.includes(tag)
-                    ? `border-violet-400 ring-2 ring-violet-400 flex-grow`
-                    : `px-4 py-2 rounded-full border border-black`
-                }>
+            <span
+              key={index}
+              className={`px-4 py-2 rounded-full border ${
+                selectedTag.includes(tag)
+                  ? "ring-1 ring-green-400"
+                  : "ring-black"
+              }`}>
+              <label htmlFor={tag}>
                 {tag}
                 <input
                   type="checkbox"
@@ -141,7 +165,11 @@ export default function SearchBar() {
                   id={tag}
                   className="appearance-none"
                   onChange={(e) =>
-                    setSelectedTag([...selectedTag, e.target.value])
+                    setSelectedTag(
+                      e.target.checked
+                        ? [...selectedTag, e.target.name]
+                        : selectedTag.filter((t) => t !== e.target.name)
+                    )
                   }
                 />
               </label>
@@ -152,7 +180,7 @@ export default function SearchBar() {
 
       <button
         type="submit"
-        className="px-4 py-2 ml-2 bg-violet-900 text-white rounded-full hover:bg-violet-600 focus:outline-none focus:ring-2 focus:ring-violet-500 col-span-3">
+        className="px-4 py-2 ml-2 bg-green-900 text-white rounded-full hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-500 col-span-3">
         Search
       </button>
     </form>

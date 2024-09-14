@@ -1,11 +1,9 @@
-import SearchBar from "./SearchBar";
-import { useEffect } from "react";
 import Cookies from "js-cookie";
+import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import user from "../services/authentication";
+import SearchBar from "../components/SearchBar";
 import { useAuth } from "../contexts/AuthContext";
-import data from "../../a.json";
-import Modal from "./Modal";
+import user from "../services/authentication";
 
 export default function LandingPage() {
   const navigate = useNavigate();
