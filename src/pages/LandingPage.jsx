@@ -21,7 +21,7 @@ export default function LandingPage() {
   }, []);
 
   return (
-    <div className="w-full h-[80dvh]">
+    <div className="w-full h-[80dvh] text-teal-700">
       <section className="p-6 text-center shadow-lg shadow-teal-100 z-20 border-2 border-teal-400 rounded-b-full">
         <h1 className="text-4xl text-teal-500 drop-shadow-2xl text-center font-900 pt-5">
           Your Journey, Perfected By AI

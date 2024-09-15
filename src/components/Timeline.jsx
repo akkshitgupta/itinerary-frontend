@@ -23,8 +23,8 @@ export default function Timeline({ activities }) {
               highlightCardsOnHover
               disableToolbar
               theme={{
-                primary: "#4CAF50",
-                secondary: "#FF8C00",
+                primary: "#5eead4",
+                secondary: "#f9f9f9",
                 cardBgColor: "#f9f9f9",
               }}
             />

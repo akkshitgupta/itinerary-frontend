@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { conf } from "../conf";
 import { useItinerary } from "../contexts/ItineraryContext";
 import handleSearch from "../services/search";
+import Loader from "./Loader";
 
 const tags = [
   "Attractions",
@@ -78,7 +79,18 @@ export default function SearchBar() {
   };
 
   return loader ? (
-    <div> Loading.....</div>
+    <>
+      <Loader />
+      <div className="flex flex-col gap-4 justify-center items-center">
+        <h3 className="text-xl font-semibold">
+          🤩 Creating Your Perfect Journey
+        </h3>
+        <p>
+          <strong>Hang Tight</strong> while we gather the best recommendations
+          for <strong>Your Next Trip</strong> It will only take a few seconds.
+        </p>
+      </div>
+    </>
   ) : (
     <form onSubmit={(e) => submitHandler(e)} className="mx-auto mt-20 w-3/5">
       <input

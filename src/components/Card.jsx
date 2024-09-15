@@ -1,3 +1,4 @@
+import logo from "../assets/logo.png";
 import { formatDate } from "../services/dateFormat";
 
 export default function Card({ itinerary }) {
@@ -5,7 +6,7 @@ export default function Card({ itinerary }) {
     <div className="w-4/5 h-52 mx-auto bg-white shadow-md shadow-teal-200 rounded-xl  m-6 flex transition-transform duration-300 ease-in-out  hover:scale-[1.01] hover:shadow-lg border-2 border-teal-400">
       <img
         className="w-1/3 h-auto object-cover rounded"
-        src={itinerary.image_url}
+        src={itinerary.image_url || logo}
         alt={itinerary.name}
       />
       <div className="pl-9 pt-5 w-2/3">

@@ -6,13 +6,14 @@ export default function TimelinePage() {
   const { itinerary } = useItinerary();
 
   return (
-    <section>
+    <section className="text-teal-700">
       <div className="p-6 text-center shadow-lg shadow-teal-100 z-20 border-2 border-teal-400 rounded-b-full">
-        <div>
-          <p>Start {formatDate(itinerary?.start_date)}</p>
-          <p>End {formatDate(itinerary?.end_date)}</p>
+        <span className="text-4xl capitalize">{itinerary?.name}</span>
+        <div className="w-1/5 text-sm mx-auto mt-5 flex justify-between items-center">
+          <span>{formatDate(itinerary?.start_date)}</span>
+          &rarr;
+          <span>{formatDate(itinerary?.end_date)}</span>
         </div>
-        <span className="text-4xl capitalize">{itinerary?.destination}</span>
       </div>
       <Timeline activities={itinerary?.activities} />
     </section>
