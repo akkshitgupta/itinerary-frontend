@@ -68,7 +68,6 @@ export default function SearchBar() {
     handleSearch(e, selectedTag)
       .then((resp) => resp.json())
       .then((data) => {
-        console.log(data);
         setItinerary(data.data);
         setLoader(false);
         navigate("/timeline");
@@ -81,9 +80,7 @@ export default function SearchBar() {
   return loader ? (
     <div> Loading.....</div>
   ) : (
-    <form
-      onSubmit={(e) => submitHandler(e)}
-      className="grid grid-cols-5 gap-6 mx-auto mt-8 w-4/5">
+    <form onSubmit={(e) => submitHandler(e)} className="mx-auto mt-20 w-3/5">
       <input
         type="text"
         name="destination"
@@ -92,7 +89,7 @@ export default function SearchBar() {
         list="suggestions"
         required
         placeholder="Search destinations..."
-        className="px-4 py-2 border border-gray-300 rounded-full shadow-sm focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent col-span-5"
+        className="px-4 py-2 my-9 border border-gray-300 rounded-full shadow w-full focus:ring-2 focus:ring-teal-400 focus:outline-none focus:border-transparent hover:ring-2 hover:ring-teal-400"
       />
       <datalist id="suggestions">
         {suggestions.map((suggestion, index) => (
@@ -102,13 +99,13 @@ export default function SearchBar() {
 
       <div
         id="date-range-picker"
-        className="flex flex-col md:flex-row items-center justify-center gap-3 col-span-5">
+        className="flex flex-col md:flex-row items-center justify-between gap-8">
         <div className="relative w-full">
-          <label htmlFor="startDate" className="my-2 text-center">
-            Start Date
+          <label htmlFor="start_date" className="my-2 text-center">
+            From
             <div className="absolute inset-y-11 start-0 flex items-center justify-center ps-3 pointer-events-none">
               <svg
-                className="w-5 h-5 text-green-400"
+                className="w-5 h-5 text-teal-400"
                 xmlns="http://www.w3.org/2000/svg"
                 fill="currentColor"
                 viewBox="0 0 20 20">
@@ -117,19 +114,19 @@ export default function SearchBar() {
             </div>
             <input
               required
-              id="datepicker-range-start"
+              id="start_date"
               name="start_date"
               type="date"
-              className="border border-green-300 text-gray-900 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block w-full ps-10 p-2.5"
+              className="border shadow text-gray-900 rounded-lg focus:ring-teal-500 focus:border-teal-500 block w-full ps-10 p-2.5"
             />
           </label>
         </div>
         <div className="relative w-full">
-          <label htmlFor="endDate" className="my-2 text-center">
-            End Date
-            <div className="absolute inset-y-11 start-0 flex items-center ps-3 pointer-events-none">
+          <label htmlFor="end_date" className="my-2 text-center">
+            To
+            <div className="absolute inset-y-11 start-0 flex items-center justify-center ps-3 pointer-events-none">
               <svg
-                className="w-5 h-5 text-green-400"
+                className="w-5 h-5 text-teal-400"
                 xmlns="http://www.w3.org/2000/svg"
                 fill="currentColor"
                 viewBox="0 0 20 20">
@@ -138,26 +135,26 @@ export default function SearchBar() {
             </div>
             <input
               required
-              id="datepicker-range-end"
+              id="end_date"
               name="end_date"
               type="date"
-              className="border border-green-300 text-gray-900 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block w-full ps-10 p-2.5"
+              className="border text-gray-900 rounded-lg focus:ring-teal-300 shadow block w-full ps-10 p-2.5"
             />
           </label>
         </div>
       </div>
 
-      <div className="col-span-5 flex flex-wrap gap-3 text-center my-3">
+      <div className="flex flex-wrap justify-center gap-3 text-center my-14">
         {tags.map((tag, index) => {
           return (
             <span
               key={index}
-              className={`px-4 py-2 rounded-full border ${
+              className={`px-4 py-2 rounded-full hover:ring-2 hover:ring-teal-400 cursor-pointer border shadow ${
                 selectedTag.includes(tag)
-                  ? "ring-1 ring-green-400"
-                  : "ring-black"
+                  ? "ring-2 ring-teal-300"
+                  : "border-gray-300"
               }`}>
-              <label htmlFor={tag}>
+              <label htmlFor={tag} className="cursor-pointer w-full h-full">
                 {tag}
                 <input
                   type="checkbox"
@@ -178,11 +175,13 @@ export default function SearchBar() {
         })}
       </div>
 
-      <button
-        type="submit"
-        className="px-4 py-2 ml-2 bg-green-900 text-white rounded-full hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-500 col-span-3">
-        Search
-      </button>
+      <div className="w-full flex justify-center">
+        <button
+          type="submit"
+          className="px-6 py-3 text-xl bg-teal-500 shadow-teal-300 w-3/5 text-white rounded-full hover:bg-teal-600 hover:shadow-md hover:shadow-teal-200 transition-transform duration-200 ease-in-out hover:scale-[1.02] focus:outline-none focus:ring-2 focus:ring-teal-500">
+          Generate
+        </button>
+      </div>
     </form>
   );
 }

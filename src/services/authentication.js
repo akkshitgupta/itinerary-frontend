@@ -1,5 +1,5 @@
-import { conf } from "../conf";
 import Cookies from "js-cookie";
+import { conf } from "../conf";
 
 export const formData = (event) => {
   event.preventDefault();
@@ -11,7 +11,7 @@ class User {
   async LoginUser(event) {
     const data = formData(event);
 
-    const resp = await fetch(conf.apiUrl + "/token/", {
+    const resp = await fetch(conf.apiUrl + "/auth/token/", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -49,8 +49,7 @@ class User {
     return res;
   }
 
-  async getDetails() {
-    const token = Cookies.get("access_token");
+  async getDetails(token) {
     try {
       const resp = await fetch(conf.apiUrl + "/user/profile/", {
         method: "GET",
@@ -60,20 +59,33 @@ class User {
         },
       });
 
-      // Parse the response data
       const respData = await resp.json();
 
-      // Check if the response was not OK (status code 200-299)
-      if (!resp.ok) {
-        throw new Error("Cannot fetch details at the moment");
-      }
+      if (!resp.ok) throw new Error("Cannot fetch details at the moment");
 
-      // Log and return the fetched data
-      console.log(respData);
       return respData;
     } catch (error) {
-      console.error("Error during fetching details:", error.message);
-      throw error; // Re-throw the error for further handling
+      throw new Error(error.message);
+    }
+  }
+
+  async recents(token) {
+    try {
+      const resp = await fetch(conf.apiUrl + "/itinerary/recent/", {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      const respData = await resp.json();
+
+      if (!resp.ok) throw new Error("Cannot fetch details at the moment");
+
+      return respData;
+    } catch (error) {
+      throw new Error("cannot find recents");
     }
   }
 }

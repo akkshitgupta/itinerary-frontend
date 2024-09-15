@@ -1,6 +1,6 @@
-import user from "../services/authentication";
-import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import user from "../services/authentication";
 
 const style =
   "bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5";
@@ -95,7 +95,7 @@ export default function SignupPage() {
 
               <button
                 type="submit"
-                className="block w-full hover:bg-green-500 hover:text-white rounded-full py-2 bg-green-100 ">
+                className="block w-full hover:bg-teal-500 hover:text-white rounded-full py-2 bg-teal-100 ">
                 Create Account
               </button>
               <p className="text-sm font-light text-gray-500">
@@ -111,7 +111,7 @@ export default function SignupPage() {
         </div>
       </div>
       <aside
-        className={`absolute top-28 right-2 px-4 py-2 bg-green-700 rounded-md text-white animate-bounce ${
+        className={`absolute top-28 right-2 px-4 py-2 bg-teal-700 rounded-md text-white animate-bounce ${
           show.status ? "" : "hidden"
         }`}>
         {show.message}

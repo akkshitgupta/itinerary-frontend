@@ -1,29 +1,27 @@
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
-import App from "./App.jsx";
-import "./index.css";
-import { AuthProvider } from "./contexts/AuthContext.jsx";
-import LoginPage from "./components/LoginPage.jsx";
-import SignupPage from "./components/SignupPage.jsx";
-import Layout from "./Layout.jsx";
 import { Route, BrowserRouter as Router, Routes } from "react-router-dom";
 import PrivateRoutes from "./components/PrivateRoutes.jsx";
-import LandingPage from "./components/LandingPage.jsx";
+import { AuthProvider } from "./contexts/AuthContext.jsx";
+import ItineraryProvider from "./contexts/ItineraryContext.jsx";
+import "./index.css";
+import { LandingPage, LoginPage, SignupPage, TimelinePage } from "./pages";
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
     <AuthProvider>
-      <Router>
-        <Routes>
-          <Route element={<Layout />}>
+      <ItineraryProvider>
+        <Router>
+          <Routes>
             <Route element={<PrivateRoutes />}>
               <Route path="/" element={<LandingPage />} />
+              <Route path="timeline" element={<TimelinePage />} />
             </Route>
             <Route path="login" element={<LoginPage />} />
             <Route path="signup" element={<SignupPage />} />
-          </Route>
-        </Routes>
-      </Router>
+          </Routes>
+        </Router>
+      </ItineraryProvider>
     </AuthProvider>
   </StrictMode>
 );

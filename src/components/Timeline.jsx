@@ -3,9 +3,9 @@ import { Chrono } from "react-chrono";
 export default function Timeline({ activities }) {
   return (
     <>
-      {Object.keys(activities).map((Day) => {
+      {Object.keys(activities).map((Day, ind) => {
         return (
-          <>
+          <div key={ind}>
             <h1 style={{ textAlign: "center", fontWeight: 600, fontSize: 50 }}>
               Day {Day}
             </h1>
@@ -22,8 +22,13 @@ export default function Timeline({ activities }) {
               focusActiveItemOnLoad
               highlightCardsOnHover
               disableToolbar
+              theme={{
+                primary: "#4CAF50",
+                secondary: "#FF8C00",
+                cardBgColor: "#f9f9f9",
+              }}
             />
-          </>
+          </div>
         );
       })}
     </>
