@@ -28,7 +28,7 @@ export default function Timeline({ activities }) {
                     name: `${activity.name}`,
                     type: "IMAGE",
                     source: {
-                      url: activity.image_url || Logo,
+                      url: activity.place_images[0]?.original || Logo,
                     },
                   },
                 };
