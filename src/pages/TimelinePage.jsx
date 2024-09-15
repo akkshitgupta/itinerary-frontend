@@ -7,7 +7,7 @@ export default function TimelinePage() {
 
   return (
     <section className="text-teal-700">
-      <div className="p-6 text-center shadow-lg shadow-teal-100 z-20 border-2 border-teal-400 rounded-b-full">
+      <div className="p-6 text-center shadow-lg shadow-teal-100 z-20 border-2 border-teal-400 rounded-b-full mb-10">
         <span className="text-4xl capitalize">{itinerary?.name}</span>
         <div className="w-1/5 text-sm mx-auto mt-5 flex justify-between items-center">
           <span>{formatDate(itinerary?.start_date)}</span>
